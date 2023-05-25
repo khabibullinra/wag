@@ -1,0 +1,220 @@
+-- Модель вытеснения нефти водой
+
+-- Model name: 
+-- line_water
+
+
+RUNSPEC
+
+VAPOIL
+
+
+RUNCTRL
+ DTMIN           0.00000000001
+/
+
+
+
+START
+ 01 OCT 2002 /
+
+
+OIL
+
+
+WATER
+
+
+GAS
+
+
+DISGAS
+
+
+COMPS
+ 9 /
+
+
+METRIC
+
+
+ENDSCALE
+ /
+
+
+DIMENS
+ 100 1 1 /
+
+
+TABDIMS
+ 1 1 1000 1000 1000 /
+
+
+MISCIBLE
+ /
+
+REGDIMS
+ 100 1 /
+
+
+EQLDIMS
+ 1 /
+
+UNIFOUT
+
+GRID
+INCLUDE
+'INCLUDE/line_GRID.inc' /
+
+
+EDIT
+
+
+PROPS
+INCLUDE
+'INCLUDE/line_PROPS.inc' /
+
+
+SWOF
+-- sw    krw    krow        pcow
+   0.2   0      1           13.05772505
+   0.224 0.0031 0.852182961  3.043856763
+   0.248 0.0065 0.703908975  1.2144983
+   0.272 0.0102 0.579876293  0.709546568
+   0.296 0.0143 0.479117773  0.484584603
+   0.32  0.0188 0.397501059  0.360505182
+   0.344 0.0237 0.330999698  0.283108953
+   0.368 0.0292 0.27632677   0.230787858
+   0.392 0.0353 0.230935531  0.193349169
+   0.416 0.0422 0.192882629  0.165400796
+   0.44  0.05   0.160686365  0.143841503
+   0.464 0.0589 0.133210824  0.126770018
+   0.488 0.0692 0.109577944  0.112960421
+   0.512 0.0813 0.089102572  0.101589247
+   0.536 0.0955 0.071244867  0.092084314
+   0.56  0.1125 0.055575392  0.084036548
+   0.584 0.1333 0.041749365  0.077146284
+   0.608 0.1594 0.029487531  0.071189337
+   0.632 0.1929 0.018561825  0.065994888
+   0.656 0.2375 0.008784529  0.061430657
+   0.68  0.3    0            0.057392734
+   1     1      0            0.02916     /
+
+
+SGOF
+-- sg     krg         krog        pcog
+   0      0           1           0
+   0.0275 0.001736284 0.926939902 0
+   0.055  0.002785654 0.847259135 0
+   0.0825 0.003777109 0.768286691 0
+   0.11   0.004791077 0.691994904 0
+   0.1375 0.005870348 0.619295281 0
+   0.165  0.007049404 0.550629133 0
+   0.1925 0.008363139 0.486182933 0
+   0.22   0.009851563 0.425993135 0
+   0.2475 0.011563886 0.370005524 0
+   0.275  0.013563362 0.318112    0
+   0.3025 0.015933924 0.270174836 0
+   0.33   0.018789947 0.226043559 0
+   0.3575 0.022291189 0.18556755  0
+   0.385  0.026666214 0.148606555 0
+   0.4125 0.032249564 0.115041264 0
+   0.44   0.039539889 0.084786987 0
+   0.4675 0.049282637 0.0578168   0
+   0.495  0.062537594 0.034212501 0
+   0.5225 0.080397158 0.014321007 0
+   0.55   0.1         0           0
+   0.8    1           0           0    /
+
+
+
+REGIONS
+
+FIPNUM
+100*1/
+
+SOLUTION
+
+
+EQUIL
+-- depth pres depth-wo pres-wo depth-go pres-go rsvd rvvd accuracy
+   2000  254  2040     0       2000     0       0    0    /
+
+
+RPTRST
+ BASIC=1 /
+
+SUMMARY
+
+ALL
+
+SCHEDULE
+
+
+--wname
+WELLTRACK 'WU1_1'
+-- X Y  Z    MD
+   5 10    0    0
+   5 10 2020 2020 /
+
+
+--wname
+WELLTRACK 'WU1_2'
+-- X   Y  Z    MD
+   295 10    0    0
+   295 10 2010 2010 /
+
+
+WELSPECS
+-- wname   gname iw jw ref.depth phase radius inflow_flag shut-in_flag crossflow_ability_flag PVT_n density_type filt.tbl reserved reserved well_model_type polymer_mixing_tbl.n
+   'WU1_1' 1*    2*    /
+   'WU1_2' 1*    2*    /
+/
+
+COMPDATMD
+-- wname|stage_name branch|stage_num mdl|delta1 mdu|delta2 md_type status filt.tbl pi diameter Kh skin D-factor cf_mult DP 
+   'WU1_1'          1*               2000       2020       MD      OPEN   2*          0.16     1* -5   1*       1                  /
+   'WU1_2'          1*               2000       2020       MD      OPEN   2*          0.16     1* -5   1*       1                  /
+/
+
+COMPORD
+-- wname   sort
+   'WU1_1' INPUT /
+   'WU1_2' INPUT /
+/
+
+WCONPROD
+-- wname   status control orate wrate grate lrate lrate(rc) BHP THP VFP_n ALQ wgrate mlrate steam sat.pressure sat.temperature calorific_rate linearly_combined_rate NGL_rate
+   'WU1_1' OPEN   BHP     5*                                200 /
+/
+
+WCONINJE
+-- wname   injector_type status control sc.rate lrate(rc) BHP THP VFP_n oil_concentration gas_volume_ratio sc_oil_proport sc_water_proport sc_gas_proport
+   'WU1_2' WATER         OPEN   BHP     2*                300 /
+/
+
+
+TSTEP
+100*7/
+
+
+WELLSTRE
+-- stream_name  mole_fractions
+ 'MIXGAS' 0.0367062 0.0017836 0.8716686 0.0792968 0.0064736 0.0019783 0.00109072 0.00013602 0.00000601 /
+/
+
+
+WINJGAS
+-- wname   fluid_nature inj.stream mnemonic sep.stage
+   'WU1_2' STREAM       'MIXGAS'   /
+/
+
+
+WCONINJE
+-- wname   injector_type status control sc.rate lrate(rc) BHP THP VFP_n oil_concentration gas_volume_ratio sc_oil_proport sc_water_proport sc_gas_proport
+   'WU1_2' GAS           OPEN   BHP     2*                300 /
+/
+
+
+TSTEP
+200*7/
